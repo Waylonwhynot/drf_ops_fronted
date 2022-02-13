@@ -23,6 +23,11 @@ import '@/permission' // permission control
 import permission from '@/directive/permission/index.js'
 
 Vue.use(permission)
+
+// xterm
+import 'xterm/css/xterm.css'
+import 'xterm/lib/xterm'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

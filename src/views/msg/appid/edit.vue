@@ -66,6 +66,7 @@ export default {
     // 提交表单数据
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
+
         if (valid) {
           if (this.curId) {
             if (!this.formData.department) {
@@ -79,6 +80,7 @@ export default {
               this.search()
             })
           } else {
+            console.log(this.formData)
             api.createAppid(this.formData).then(res => {
               this.$message({
                 message: '新增成功',

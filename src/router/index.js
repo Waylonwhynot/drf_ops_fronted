@@ -79,13 +79,13 @@ export const constantRoutes = [
         path: 'appid',
         name: 'Appid',
         component: () => import('@/views/msg/appid/index'),
-        meta: { title: 'AppID申请', icon: 'app', noCache: true }
+        meta: {title: 'AppID申请', icon: 'app', noCache: true}
       },
       {
         path: 'wxmsglog',
         name: 'Wxmsglog',
         component: () => import('@/views/msg/logs/index'),
-        meta: { title: '消息日志', icon: 'log', noCache: true }
+        meta: {title: '消息日志', icon: 'log', noCache: true}
       }
     ]
   },
@@ -103,19 +103,19 @@ export const constantRoutes = [
         path: 'Apply',
         name: 'apply',
         component: () => import('@/views/workorder/apply/index'),
-        meta: { title: '工单申请', icon: 'app', noCache: true }
+        meta: {title: '工单申请', icon: 'app', noCache: true}
       },
       {
         path: 'List',
         name: 'list',
         component: () => import('@/views/workorder/list/index'),
-        meta: { title: '申请列表', icon: 'log', noCache: true }
+        meta: {title: '申请列表', icon: 'log', noCache: true}
       },
       {
         path: 'History',
         name: 'history',
         component: () => import('@/views/workorder/history/index'),
-        meta: { title: '工单历史', icon: 'log', noCache: true }
+        meta: {title: '工单历史', icon: 'log', noCache: true}
       }
     ]
   },
@@ -123,33 +123,32 @@ export const constantRoutes = [
     path: '/tasks',
     component: Layout,
     name: 'Tasks',
-    meta: { title: '任务系统', icon: 'tree' },
+    meta: {title: '任务系统', icon: 'tree'},
     children: [
       {
         path: 'add',
         name: '任务添加',
         component: () => import('@/views/tasks/add/index'),
-        meta: { title: '任务添加', icon: 'form' }
+        meta: {title: '任务添加', icon: 'form'}
       },
       {
         path: 'list',
         name: '任务列表',
         component: () => import('@/views/tasks/list/index'),
-        meta: { title: '申请列表', icon: 'table' }
+        meta: {title: '申请列表', icon: 'table'}
       },
     ]
   },
   {
     path: '/project',
     component: Layout,
-    name: '项目管理',
-    meta: { title: '项目管理', icon: 'code' },
+    meta: {title: '项目管理', icon: 'code'},
     children: [
       {
         path: 'project',
-        name: '项目管理',
+        name: 'Project',
         component: () => import('@/views/project/index'),
-        meta: { title: '项目管理', icon: 'user' }
+        meta: {title: '项目管理', icon: 'user'}
       }
     ]
   },
@@ -157,25 +156,25 @@ export const constantRoutes = [
     path: '/release',
     component: Layout,
     name: '代码上线',
-    meta: { title: '代码上线', icon: 'user' },
+    meta: {title: '代码上线', icon: 'user'},
     children: [
       {
         path: 'apply',
         name: '申请上线',
         component: () => import('@/views/release/apply/index'),
-        meta: { title: '申请上线', icon: 'user' }
+        meta: {title: '申请上线', icon: 'user'}
       },
       {
         path: 'list',
         name: '申请列表',
         component: () => import('@/views/release/list/index'),
-        meta: { title: '申请列表', icon: 'tree' }
+        meta: {title: '申请列表', icon: 'tree'}
       },
       {
         path: 'history',
         name: '上线列表',
         component: () => import('@/views/release/history/index'),
-        meta: { title: '上线列表', icon: 'tree' }
+        meta: {title: '上线列表', icon: 'tree'}
       }
     ]
   },
@@ -186,7 +185,29 @@ export const constantRoutes = [
  * 权限判断动态渲染菜单
  */
 export const asyncRoutes = [
-  // 系统管理
+  // 资产管理
+  {
+    path: '/host',
+    component: Layout,
+    redirect: '/host/server',
+    name: 'Host',
+    meta: {title: 'CMDB', icon: 'system'},
+    children: [
+      {
+        path: 'server',
+        name: 'Server',
+        component: () => import('@/views/host/index'),
+        meta: {title: '资产管理', icon: 'user', affix: true}
+      },
+      {
+        // router  router路由跳转动作，this.$router.push('/')
+        // route   this.$route.params.id -- 2
+        path: 'console/:id/', // 动态路由匹配
+        component: () => import('@/views/host/console'),
+      },
+
+    ]
+  },
   {
     path: '/system',
     component: Layout,
@@ -224,44 +245,44 @@ export const asyncRoutes = [
       },
     ]
   },
-  {
-    path: '/cmdb',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'Cmdb',
-    meta: {
-      permissions: ['admin', 'cmdb'],
-      title: '资源管理',
-      icon: 'resources'
-    },
-    children: [
-      {
-        path: 'servers',
-        name: 'Servers',
-        component: () => import('@/views/resource/index'),
-        meta: {permissions: ['admin', 'cmdb-servers'], title: '主机资源', icon: 'server', noCache: true},
-      },
-      {
-        path: 'model',
-        name: 'Model',
-        component: () => import('@/views/model/index'),
-        meta: {title: '模型管理', icon: 'el-icon-s-order'}
-      },
-      {
-        path: 'log',
-        name: 'Log',
-        component: () => import('@/views/log/index'),
-        meta: {title: '操作日志', icon: 'el-icon-s-order'}
-      },
-    ]
-  },
+  // {
+  //   path: '/cmdb',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   name: 'Cmdb',
+  //   meta: {
+  //     permissions: ['admin', 'cmdb'],
+  //     title: '资源管理',
+  //     icon: 'resources'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'servers',
+  //       name: 'Servers',
+  //       component: () => import('@/views/resource/index'),
+  //       meta: {permissions: ['admin', 'cmdb-servers'], title: '主机资源', icon: 'server', noCache: true},
+  //     },
+  //     {
+  //       path: 'model',
+  //       name: 'Model',
+  //       component: () => import('@/views/model/index'),
+  //       meta: {title: '模型管理', icon: 'el-icon-s-order'}
+  //     },
+  //     {
+  //       path: 'log',
+  //       name: 'Log',
+  //       component: () => import('@/views/log/index'),
+  //       meta: {title: '操作日志', icon: 'el-icon-s-order'}
+  //     },
+  //   ]
+  // },
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]
 
 // 初始化Router实例挂载constantRoutes
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })

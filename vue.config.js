@@ -40,8 +40,6 @@ module.exports = {
     // 解决跨域问题
     proxy: {
       [process.env.VUE_APP_BASE_API]: { // /dev-api
-        // target: 'http://mengxuegu.com:7300/mock/5f114e0544ef223bad8c9827/blog-admin',
-        // target: 'https://mock.mengxuegu.com/mock/6108b649d429e55ffb8a2559/ops-admin',
         target: 'http://127.0.0.1:8000/api',
         changeOrigin: true, // 开启代理服务器,
         pathRewrite: {
