@@ -125,13 +125,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log('提交前formData', this.formData.category)
-          console.log('提交前formData', this.formData.ip_addr)
-          console.log('提交前formData', this.formData.desc)
-          console.log('提交前formData', this.formData.hostname)
-          console.log('提交前formData', this.formData.password)
-          console.log('提交前formData', this.formData)
-          console.log('提交前formData', {...this.formData})
           if (this.curId) {
             if (!this.formData.pid) {
               this.formData.pid = null
