@@ -138,12 +138,6 @@ export default {
             })
           } else {
             api.createHost(this.formData).then(res => {
-              console.log('提交formData', this.formData.category)
-              console.log('提交formData', this.formData.ip_addr)
-              console.log('提交formData', this.formData.desc)
-              console.log('提交formData', this.formData.hostname)
-              console.log('提交formData', this.formData.password)
-              console.log('提交formData', this.formData)
               this.$message({
                 message: '新增成功',
                 type: 'success'
