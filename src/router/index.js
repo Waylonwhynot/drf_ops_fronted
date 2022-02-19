@@ -295,6 +295,38 @@ export const asyncRoutes = [
       },
     ]
   },
+  // 监控相关
+  {
+    path: '/monitor',
+    component: Layout,
+    redirect: '/monitor/alert',
+    name: 'Monitor',
+    meta: {
+      // permissions: [],
+      title: '告警详情',
+      icon: 'el-icon-umbrella'
+    },
+    children: [
+      {
+        path: 'alert',
+        name: 'Alert',
+        component: () => import('@/views/monitor/alert/index'),
+        meta: {title: 'zabbix告警信息', icon: 'monitor', noCache: true}
+      },
+      {
+        path: 'promalert',
+        name: 'PromAlert',
+        component: () => import('@/views/monitor/alert/index_prom'),
+        meta: {title: 'prometheus告警信息', icon: 'monitor', noCache: true}
+      },
+      {
+        path: 'statistics',
+        name: 'Statistics',
+        component: () => import('@/views/monitor/alert/statistics'),
+        meta: {title: '告警统计', icon: 'el-icon-s-data', noCache: true}
+      }
+    ]
+  },
   //系统管理
   {
     path: '/system',

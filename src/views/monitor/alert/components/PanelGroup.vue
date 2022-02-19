@@ -25,7 +25,7 @@
           <div class="card-panel-text">主机数</div>
           <count-to
             :start-val="0"
-            :end-val="hostTotal"
+            :end-val="articleTotal"
             :duration="3000"
             class="card-panel-num"
           />
@@ -42,7 +42,7 @@
           <div class="card-panel-text">4xx/5xx</div>
           <count-to
             :start-val="0"
-            :end-val="logsErrors"
+            :end-val="questionTotal"
             :duration="3200"
             class="card-panel-num"
           />
@@ -59,7 +59,7 @@
           <div class="card-panel-text">QPS</div>
           <count-to
             :start-val="0"
-            :end-val="queriesPerSecond"
+            :end-val="questionTotal"
             :duration="3200"
             class="card-panel-num"
           />
@@ -82,21 +82,15 @@ export default {
       type: Number,
       default: 0,
     },
-    queriesPerSecond: {
+    articleTotal: {
       type: Number,
       default: 0,
     },
-    hostTotal: {
+    questionTotal: {
       type: Number,
       default: 0,
     },
-    logsErrors: {
-      type: Number,
-      default: 0,
-    }
   },
-
-  methods: {}
 };
 </script>
 

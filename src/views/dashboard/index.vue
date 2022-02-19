@@ -1,27 +1,22 @@
 <template>
   <div class="dashboard-container">
     <!-- 面板统计组件 -->
-    <panel-group :userTotal="userTotal" :articleTotal="articleTotal" :questionTotal="questionTotal"/>
-
+    <panel-group :userTotal="userTotal" :hostTotal=getHost
+                 :queriesPerSecond="queriesPerSecond" :logsErrors="logsErrors"/>
     <el-row :gutter="40">
       <el-col :xs="24" :sm="24" :lg="12">
         <el-card>
-<!--          <pie-chart :legendData="categoryTotal.nameList" :seriesData="categoryTotal.nameAndValueList"/>-->
-          <pie-chart/>
+          <pie-chart :seriesData="bdCloudResourceCount" v-if="flag"/>
         </el-card>
       </el-col>
-
       <el-col :xs="24" :sm="24" :lg="12">
         <el-card>
           <!--
             注意：echarts 在初始化实例的时候就要拿到数据，有数据就会展示出来
            -->
-          <bar-chart v-if="flag" :xAxisData="monthArticleTotal.yearMonthList" :seriesData="monthArticleTotal.aritcleTotalList" />
-          <bar-chart/>
+          <bar-chart v-if="flag" :xAxisData="weekAlertData.date_data" :seriesData="weekAlertData.count_data"/>
         </el-card>
       </el-col>
-
-
     </el-row>
   </div>
 </template>
@@ -30,6 +25,8 @@
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
 import PanelGroup from './components/PanelGroup'
+import {getWeekAlertCount} from '@/api/monitor/alertcenter'
+import {getBdCloudResource} from '@/api/dashboard/dashboard'
 
 // 1. 导入home.js
 
@@ -39,50 +36,40 @@ export default {
 
   data() {
     return {
-      userTotal: 0, // 总用户
-      articleTotal: 0, //总文章
-      questionTotal: 0, // 总提问
-
       flag: false, // 判断是否显示图表组件
-      categoryTotal: {}, // 每个分类下的文章数
-      monthArticleTotal: {} // 查询近6个月发布文章数
+      panelFlag: false,
+      weekAlertData: {}, // 一周告警统计
+      queriesPerSecond: 268, // ApiSix QPS
+      hostTotal: 302, //主机数
+      userTotal: 60, // 访问量
+      logsErrors: 50, // 日志错误数
+      bdCloudResourceCount: {} // 云资源统计
     }
   },
 
   mounted() {
-    // 查询面板中相关的总记录数
-    // this.getTotal()
-    // 统计各技术频道文章数和近6个月发布文章数
-    // this.getAricleTotal()
+    this.getData()
   },
 
   methods: {
-    // async getTotal() {
-    //   //查询总用户。 data取别名userTotal
-    //   const {data: userTotal} = await api.getUserTotal()
-    //   this.userTotal = userTotal
-    //
-    //   // 总文章
-    //   const {data: articleTotal} = await api.getArticleTotal()
-    //   this.articleTotal = articleTotal
-    //
-    //   // 总提问
-    //   const {data: questionTotal} = await api.getQuestionTotal()
-    //   this.questionTotal = questionTotal
-    // },
-    //
-    // async getAricleTotal() {
-    //   // 统计各技术频道文章数
-    //   const {data: categoryTotal} = await api.getCategoryTotal()
-    //   this.categoryTotal = categoryTotal
-    //
-    //   // 近6个月发布文章数
-    //   const {data: monthArticleTotal} = await api.getMonthArticleTotal()
-    //   this.monthArticleTotal = monthArticleTotal
-    //
-    //   // 先查询到数据后，再加载图表组件，将数据渲染，
-    //   this.flag = true
-    // }
+    async getData() {
+      const {data} = await getWeekAlertCount()
+      this.weekAlertData = data
+      const res1 = await getBdCloudResource()
+      this.bdCloudResourceCount = res1.data
+      // 先查询到数据后，再加载图表组件，将数据渲染，
+      this.flag = true
+    }
+  },
+  computed: {
+    getHost() {
+      for (var i = 0; i < this.bdCloudResourceCount.length; i++) {
+        if ( this.bdCloudResourceCount[i].name == 'BCC' ) {
+          this.hostTotal = this.bdCloudResourceCount[i].value
+        }
+      }
+      return(this.hostTotal)
+    }
   }
 }
 

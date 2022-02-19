@@ -30,15 +30,14 @@ export default {
     },
     legendData: { // 左侧组件接收的数据
       type: Array,
-      // default: () => ['BLB', 'APP_BLB', 'RDS', 'BCE', 'BCC']
+      default: () => ['BLB', 'RDS', 'BCE', 'BCC']
     },
     seriesData: { // 饼状图中接收的数据
       type: Array,
       default: () => [
         {value: 100, name: 'BLB'},
-        {value: 100, name: 'APP_BLB'},
         {value: 200, name: 'RDS'},
-        {value: 500, name: 'CCE'},
+        {value: 500, name: 'BCE'},
         {value: 300, name: 'BCC'},
       ]
     }

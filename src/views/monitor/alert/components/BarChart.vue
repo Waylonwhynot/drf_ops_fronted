@@ -25,13 +25,16 @@ export default {
     },
     height: {
       type: String,
-      default: '400px'
+      default: '350px'
+    },
+    flag:{
+      type: String
     },
     xAxisData: { // x轴显示的数据
       type: Array,
       // default: () => ['2021-12-20', '2021-12-21', '2021-12-22', '2021-12-23', '2021-12-24', '2021-12-25', '2021-12-27']
     },
-    seriesData: { // 饼状图中接收的数据
+    seriesData: {
       type: Array,
       // default: () => [10, 521, 200, 334, 390, 330, 50]
     }
@@ -39,7 +42,7 @@ export default {
 
   data() {
     return {
-      chart: null // 引用echarts实例属性
+      chart: null, // 引用echarts实例属性
     }
   },
 
@@ -66,10 +69,14 @@ export default {
       // 初始化echarts实例，第2个参数是主题
       this.chart = echarts.init(this.$refs.main, 'macarons')
       this.chart.setOption({
-        // color: ['#3398DB'],
-        title: { // 标题
-          text: '近7天告警数变化',
-          left: 'center'
+        // color: ['#18d7c1'],
+        title: {
+          text: '告警数统计(每周)',
+          left: 'left',
+          subtext: '最近一个月'
+        },
+        legend: {
+          data: ['告警数']
         },
         tooltip: { // 提示框
           trigger: 'axis',
@@ -101,7 +108,7 @@ export default {
           {
             name: '告警数',
             type: 'bar', // 柱状图
-            barWidth: '60%', // 每个柱子宽度
+            barWidth: '50%', // 每个柱子宽度
             data: this.seriesData
           }
         ]
