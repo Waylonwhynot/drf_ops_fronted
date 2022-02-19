@@ -3,72 +3,82 @@
     <!-- 条件查询 -->
     <el-form :inline="true" :model="form" size="mini">
       <el-row :gutter="5">
-        <el-col :span="4"><div>
-          <el-form-item prop="search">
-            <span style="color: #000000">发布环境：</span>
-            <el-select v-model="deploy_env" placeholder="请选择" style="width: 120px">
-              <el-option
-                v-for="item in envs_data"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </div></el-col>
-        <el-col :span="4"><div>
-          <el-form-item prop="search">
-            <span style=" color: #000000">应用名称：</span>
-            <el-select v-model="deploy_app_name" placeholder="请选择" style="width: 120px">
-              <el-option
-                v-for="item in app_data"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </div></el-col>
-        <el-col :span="10"><div>
-          <el-form-item prop="search">
-            <span style="color: #000000">申请时间：</span>
-            <el-time-select
-              placeholder="起始时间"
-              v-model="startTime"
-              :picker-options="{
+        <el-col :span="4">
+          <div>
+            <el-form-item prop="search">
+              <span style="color: #000000">发布环境：</span>
+              <el-select v-model="deploy_env" placeholder="请选择" style="width: 120px">
+                <el-option
+                  v-for="item in envs_data"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <el-form-item prop="search">
+              <span style=" color: #000000">应用名称：</span>
+              <el-select v-model="deploy_app_name" placeholder="请选择" style="width: 120px">
+                <el-option
+                  v-for="item in app_data"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <div>
+            <el-form-item prop="search">
+              <span style="color: #000000">申请时间：</span>
+              <el-time-select
+                placeholder="起始时间"
+                v-model="startTime"
+                :picker-options="{
                 start: '08:30',
                 step: '00:15',
                 end: '18:30'
               }">
-            </el-time-select>
-            <el-time-select
-              placeholder="结束时间"
-              v-model="endTime"
-              :picker-options="{
+              </el-time-select>
+              <el-time-select
+                placeholder="结束时间"
+                v-model="endTime"
+                :picker-options="{
               start: '08:30',
               step: '00:15',
               end: '18:30',
               minTime: startTime
             }">
-            </el-time-select>
-          </el-form-item>
-        </div></el-col>
-        <el-col :span="6"><div>
-          <el-form-item>
-            <el-button icon="el-icon-search" type="info" @click="queryData">搜索</el-button>
-            <el-button icon="el-icon-refresh" type="warning" @click="reload">重置</el-button>
-            <el-button icon="el-icon-circle-plus-outline" type="primary" @click="handleCreateDeployApply()">新建发布申请</el-button>
-          </el-form-item>
-        </div></el-col>
+              </el-time-select>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div>
+            <el-form-item>
+              <el-button icon="el-icon-search" type="info" @click="queryData">搜索</el-button>
+              <el-button icon="el-icon-refresh" type="warning" @click="reload">重置</el-button>
+              <el-button icon="el-icon-circle-plus-outline" type="primary" @click="handleCreateDeployApply()">新建发布申请
+              </el-button>
+            </el-form-item>
+          </div>
+        </el-col>
       </el-row>
     </el-form>
     <div class="release_apply_category" style="display: flex;justify-content: space-between;">
       <el-radio-group v-model="apply_category" size="small" @change="handleCategoryChange">
         <el-radio-button label="0">
-          全部({{release_apply_data.length}})
+          全部({{ release_apply_data.length }})
         </el-radio-button>
-        <el-radio-button :label="status_value[0]" v-for="(status_value,status_index) in release_apply_status_data" :key="status_index">
-          {{status_value[1]}}({{classify_release_apply_data[status_value[0]].length}})
+        <el-radio-button :label="status_value[0]" v-for="(status_value,status_index) in release_apply_status_data"
+                         :key="status_index">
+          {{ status_value[1] }}({{ classify_release_apply_data[status_value[0]].length }})
         </el-radio-button>
       </el-radio-group>
     </div>
@@ -87,10 +97,37 @@
         <el-table-column prop="created_time" label="申请时间"></el-table-column>
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
-            <el-button type="info" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">审核</el-button>
-            <el-button type="primary" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">编辑</el-button>
-            <el-button type="danger" icon="el-icon-edit"  @click="handleDelete(scope.row.id)" size="mini">删除</el-button>
+            <div v-if="scope.row.release_status==='1'">
+              <el-button type="info" icon="el-icon-edit" @click="review_info(scope.row)" size="mini">审核</el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
+              <el-button type="danger" icon="el-icon-edit" @click="handleDelete(scope.row.id)" size="mini">删除
+              </el-button>
+            </div>
+            <div v-else-if="scope.row.release_status==='2'">
+              <el-button type="info" icon="el-icon-edit" size="mini">
+                <router-link :to="'/newrelease/release_result/' + scope.row.id + '/'">发布</router-link>
+              </el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">查看</el-button>
+            </div>
+            <div v-else-if="scope.row.release_status==='3'">
+              <el-button type="info" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">查看</el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">回滚</el-button>
+            </div>
+            <div v-else-if="scope.row.release_status==='4'">
+              <el-button type="info" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">快查看吧</el-button>
+            </div>
+            <div v-else>
+              <el-button type="info" icon="el-icon-edit" @click="handleEdit(scope.row)" size="mini">查看</el-button>
+            </div>
           </template>
+          <!--          <template slot-scope="scope" v-if="scope.row.release_status==='2'">-->
+          <!--            <el-button type="info" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">发布</el-button>-->
+          <!--            <el-button type="primary" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">查看</el-button>-->
+          <!--          </template>-->
+          <!--          <template slot-scope="scope" v-if="scope.row.release_status==='3'">-->
+          <!--            <el-button type="info" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">查看</el-button>-->
+          <!--            <el-button type="primary" icon="el-icon-edit"  @click="handleEdit(scope.row)" size="mini">回滚</el-button>-->
+          <!--          </template>-->
         </el-table-column>
       </el-table>
     </div>
@@ -107,8 +144,9 @@
       :total="total">
     </el-pagination>
     <!-- 编辑组件 -->
-    <edit :visible="visible" :cur-id="curId" @close="close" @search="fetchData" />
-    <apply :deployApplyOuterVisible="deployApplyOuterVisible" @search="fetchData"  @close="outClose"/>
+    <edit :visible="visible" :cur-id="curId" @close="close" @search="fetchData"/>
+    <review :reviewVisible="reviewVisible" :release-id="release_id" @close="reviewClose" @search="fetchData"/>
+    <apply :deployApplyOuterVisible="deployApplyOuterVisible" @search="fetchData" @close="outClose"/>
 
   </div>
 </template>
@@ -119,11 +157,12 @@ import * as api from '@/api/newrelease/app/app'
 
 import Edit from './edit'
 import Apply from './apply'
+import Review from './review'
 
 export default {
   name: 'ReleaseApply', // 和对应路由表中配置的name值一致
 
-  components: {Edit, Apply},
+  components: {Edit, Apply, Review},
 
   data() {
     return {
@@ -142,34 +181,35 @@ export default {
       visible: false,
       deployOuterVisible: false,
       curId: null,
-      envs_data:[],  // 环境数据
-      envs_id:1, // 所选环境的id值
-      app_data:[],  // 应用数据
-      release_apply_data:[],  // 发布申请数据
-      classify_release_apply_data:{},  // 所有分类归纳的发布申请数据
-      different_status_release_apply:[], // 点击不能分类时的 发布申请数据
-      release_apply_status_data:[],  // 发布申请状态数据
+      reviewVisible: false, // 审核模态框
+      release_id: 0, // 审核数据ID
+      envs_data: [],  // 环境数据
+      envs_id: 1, // 所选环境的id值
+      app_data: [],  // 应用数据
+      release_apply_data: [],  // 发布申请数据
+      classify_release_apply_data: {},  // 所有分类归纳的发布申请数据
+      different_status_release_apply: [], // 点击不同分类时的 发布申请数据
+      release_apply_status_data: [],  // 发布申请状态数据
       // [{1: '待审核'}, {2: '待发布'}}]
       // 根据分类划分出5个数据
-      release_apply_data_1 : [], // 待审核数据
-      release_apply_data_2 : [], // 待发布数据
-      release_apply_data_3 : [], // 发布成功数据
-      release_apply_data_4 : [], // 发布异常数据
-      release_apply_data_5 : [], // 其他类型数据
+      release_apply_data_1: [], // 待审核数据
+      release_apply_data_2: [], // 待发布数据
+      release_apply_data_3: [], // 发布成功数据
+      release_apply_data_4: [], // 发布异常数据
+      release_apply_data_5: [], // 其他类型数据
 
       // data,
       apply_category: '0',  // 发布申请分类，默认为全部
       choose_app_visible: false,
       new_release_visible: false,
-      collapsed: false, // 环境分类菜单栏数据属性
       new_release_form_data: {
         labelCol: {span: 4},
         wrapperCol: {span: 14},
         other: '',
         form: {
           apply_title: '', // 申请标题
-          git_release_branch_or_tag:'1',  // 申请选择的是git分支还是标签
-          git_release_version:'1', // 分支/标签 的版本
+          git_release_branch_or_tag: '1',  // 申请选择的是git分支还是标签
+          git_release_version: '1', // 分支/标签 的版本
           git_release_commit_id: '', // git的commit id 数据
 
           release_desc: '',  // 备注信息
@@ -206,29 +246,25 @@ export default {
       this.different_status_release_apply = this.release_apply_data;
     },
 
-    get_release_apply_status_data(){
+    get_release_apply_status_data() {
       api.getReleaseApplyStatus().then(res => {
         this.release_apply_status_data = res.data.results
       }).catch((error) => {
-          console.log(error)
+        console.log(error)
       })
     },
     // 根据发布申请的状态，将发布申请数据进行分类,请求数据回来之后，就执行该方法
-    classify_release_data_by_status(){
-      this.release_apply_data.forEach((k,v)=>{
-        if (k.release_status === '1'){
+    classify_release_data_by_status() {
+      this.release_apply_data.forEach((k, v) => {
+        if (k.release_status === '1') {
           this.release_apply_data_1.push(k);
-        }
-        else if (k.release_status === '2'){
+        } else if (k.release_status === '2') {
           this.release_apply_data_2.push(k);
-        }
-        else if (k.release_status === '3'){
+        } else if (k.release_status === '3') {
           this.release_apply_data_3.push(k);
-        }
-        else if (k.release_status === '4'){
+        } else if (k.release_status === '4') {
           this.release_apply_data_4.push(k);
-        }
-        else {
+        } else {
           this.release_apply_data_5.push(k);
         }
 
@@ -309,6 +345,10 @@ export default {
     outClose() {
       this.deployApplyOuterVisible = false
     },
+    reviewClose() {
+      this.reviewVisible = false
+      this.release_id = null
+    },
     // 发布类型按钮点击切换效果
     handleCategoryChange(label) {
       console.log('>>>label change', label)
@@ -320,6 +360,14 @@ export default {
     // 新建发布申请
     handleCreateDeployApply() {
       this.deployApplyOuterVisible = true
+    },
+    // 审核模态框
+    // 点击审核,记录id值并弹出审核对话框
+    review_info(row) {
+      this.release_id = row.id
+      console.log('release_id>>>', this.release_id);
+      // this.review_data.release_id = release_id;
+      this.reviewVisible = true;
     },
 
   }
