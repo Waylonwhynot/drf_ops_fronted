@@ -46,6 +46,15 @@ export function getHosts(data) {
   })
 }
 
+// 按照环境获取主机列表
+export function getEnvHosts(data) {
+  return request({
+    url: '/host/server/',
+    method: 'get',
+    params: data
+  })
+}
+
 // 导出主机列表excel
 export function getHostsExcel() {
   return request({

@@ -208,6 +208,94 @@ export const asyncRoutes = [
 
     ]
   },
+  // 批量任务
+  {
+    path: '/mtask',
+    component: Layout,
+    redirect: '/mtask/exec',
+    name: 'Mtask',
+    meta: {
+      title: '批量任务',
+      icon: 'system'
+    },
+    children: [
+      {
+        path: 'multiexec',
+        name: 'MultiExec',
+        component: () => import('@/views/multiexec/index'),
+        meta: {title: '批量任务', icon: 'user', noCache: true}
+      },
+      {
+        path: 'managecommand',
+        name: 'ManageCommand',
+        component: () => import('@/views/multiexec/index'),
+        meta: {title: '命令管理', icon: 'user', noCache: true}
+      },
+    ]
+  },
+  // 配置管理
+  {
+    path: '/confcenter',
+    component: Layout,
+    redirect: '/confcenter/env',
+    name: 'ConCenter',
+    meta: {
+      title: '配置管理',
+      icon: 'system'
+    },
+    children: [
+      {
+        path: 'env',
+        name: 'Env',
+        component: () => import('@/views/confcenter/env/index'),
+        meta: {title: '环境管理', icon: 'el-icon-menu', noCache: true}
+      },
+      {
+        path: 'managecommand1',
+        name: 'ManageCommand1',
+        component: () => import('@/views/multiexec/index'),
+        meta: {title: '服务配置', icon: 'user', noCache: true}
+      },
+      {
+        path: 'managecommand2',
+        name: 'ManageCommand2',
+        component: () => import('@/views/multiexec/index'),
+        meta: {title: '应用配置', icon: 'user', noCache: true}
+      },
+    ]
+  },
+  //代码发布
+  {
+    path: '/newrelease',
+    component: Layout,
+    redirect: '/newrelease/releaseapp',
+    name: 'NewRelease',
+    meta: {
+      title: '代码发布',
+      icon: 'system'
+    },
+    children: [
+      {
+        path: 'releaseapp',
+        name: 'releaseapp',
+        component: () => import('@/views/newrelease/app/index'),
+        meta: {title: '应用管理', icon: 'el-icon-menu', noCache: true}
+      },
+      {
+        path: 'releaseapply',
+        name: 'ReleaseApply',
+        component: () => import('@/views/newrelease/deploy_apply/index'),
+        meta: {title: '发布申请', icon: 'user', noCache: true}
+      },
+      {
+        // router  router路由跳转动作，this.$router.push('/')
+        // route   this.$route.params.id -- 2
+        path: 'release_result/:id/', // 动态路由匹配
+        component: () => import('@/views/newrelease/deploy_apply/ReleaseResult'),
+      },
+    ]
+  },
+  //系统管理
   {
     path: '/system',
     component: Layout,
