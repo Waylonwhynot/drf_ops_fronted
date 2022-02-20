@@ -68,7 +68,7 @@ export const constantRoutes = [
   {
     path: '/msg',
     component: Layout,
-    redirect: '/msg/msg',
+    redirect: '/msg/appid',
     name: 'Msg',
     meta: {
       title: '消息中心',
@@ -149,6 +149,19 @@ export const constantRoutes = [
         name: 'Project',
         component: () => import('@/views/project/index'),
         meta: {title: '项目管理', icon: 'user'}
+      }
+    ]
+  },
+  {
+    path: '/schedule',
+    component: Layout,
+    meta: {title: '定时任务', icon: 'user'},
+    children: [
+      {
+        path: 'schedule',
+        name: 'Schedule',
+        component: () => import('@/views/schedule/index'),
+        meta: {title: '定时任务', icon: 'user'}
       }
     ]
   },
